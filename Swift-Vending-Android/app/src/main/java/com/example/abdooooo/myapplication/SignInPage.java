@@ -1,6 +1,7 @@
 package com.example.abdooooo.myapplication;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,11 +20,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class SignInPage extends AppCompatActivity {
-
+    //String item_id;
+    //public void SignInPage(String id){
+    //    item_id=id;
+    //}
+    private Activity activityReference;
+    String user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.SignIn_Page);
+        setContentView(R.layout.signin_page);
+        activityReference=this;
 
 //        Button btn_button =(Button) findViewById(R.id.order);
 //        btn_button.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +61,7 @@ public class SignInPage extends AppCompatActivity {
                 }
                 else {
                     Login(mEmail.getText().toString(), mPassword.getText().toString());
+
                 }
             }
 
@@ -68,11 +76,12 @@ public class SignInPage extends AppCompatActivity {
 
             //condition of login
             public void Login(String name, String password) {
-                    String url= "https://resttest--59196.eu-gb.mybluemix.net/RestTest/jaxrs/SignIn" ;
+                    String url= "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/SignIn" ;
+                    user_id = name ;
                     new SignIn_check().execute(url , name , password);
             }
 
-    public class SignIn_check extends AsyncTask<String, Void, String> {
+       protected class SignIn_check extends AsyncTask<String, Void, String> {
         String error , out="";
         @Override
         protected void onPreExecute() {
@@ -81,7 +90,8 @@ public class SignInPage extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-
+            Intent i = getIntent();
+            String item_id = i.getStringExtra("item_id");
             BufferedReader br = null;
             String username , password ;
             URL url;
@@ -115,6 +125,7 @@ public class SignInPage extends AppCompatActivity {
                 }
 
                 String content = sb.toString();
+                connection.disconnect();;
                 out = content;
                 return content;
 
@@ -137,18 +148,24 @@ public class SignInPage extends AppCompatActivity {
 
         @Override
         public void onPostExecute(String result) {
-           if(result.contains("1")) {
-               // open new activity
-               startActivity(new Intent(getApplicationContext(), Main3Activity.class));
-           }
-           else if (result.contains("2")){
-               Toast.makeText(getApplication(),"Wrong Username", Toast.LENGTH_LONG).show();
-           }
-           else{
-               Toast.makeText(getApplication(), "Wrong password", Toast.LENGTH_LONG).show();
-           }
+            if(result.contains("1")) {
+                // open new activity
+                //new Buy_Item()
+                final Intent i = new Intent (activityReference, MultiTrackerActivity.class);
+                String item_id  = result;
+                i.putExtra("user_id", user_id);
+                startActivity(i);
+                //startActivity(new Intent(getApplicationContext(), MultiTrackerActivity.class));
+            }
+            else if (result.contains("2")){
+                Toast.makeText(getApplication(),"Wrong Username", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(getApplication(), "Wrong password", Toast.LENGTH_LONG).show();
+            }
         }
     }
+
 
 }
 

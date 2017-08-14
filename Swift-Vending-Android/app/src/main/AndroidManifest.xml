@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.abdooooo.myapplication">
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,28 +20,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".SignInPage"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+            <!--android:name=".Main2Activity"-->
+            <!--android:label="@string/title_activity_main2"-->
+            <!--android:parentActivityName=".SignInPage"-->
+            <!--an0droid:theme="@style/AppTheme.NoActionBar">-->
+            <!--<meta-data-->
+                <!--android:name="android.support.PARENT_ACTIVITY"-->
+                <!--android:value="com.example.abdooooo.myapplication.SignInPage" />-->
+        <!--</activity>-->
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:parentActivityName=".SignInPage"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.abdooooo.myapplication.SignInPage" />
+            android:name="com.example.abdooooo.myapplication.MultiTrackerActivity"
+            android:label="Multi-Tracker"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="fullSensor">
+            <intent-filter>
+              <!--//  <action android:name="android.intent.action.MAIN" />-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name="camera.BarcodeCaptureActivity" />
         <activity android:name=".History" />
         <activity android:name=".signUp" />
-        <activity android:name=".Main3Activity"></activity>
     </application>
 
 </manifest>

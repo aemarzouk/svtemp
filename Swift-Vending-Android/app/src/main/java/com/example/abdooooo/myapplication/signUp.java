@@ -1,5 +1,6 @@
 package com.example.abdooooo.myapplication;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +27,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class signUp extends AppCompatActivity {
-
+    private Activity activityReference;
+    String user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        activityReference=this;
         setContentView(R.layout.activity_sign_up);
         final Button button = (Button) findViewById(R.id.signup);
         final EditText mEmail = (EditText) findViewById(R.id.email);
@@ -44,7 +47,7 @@ public class signUp extends AppCompatActivity {
 
                     } else {
                         // Code here executes on main thread after user presses button
-                        String restURL = "https://resttest--59196.eu-gb.mybluemix.net/RestTest/jaxrs/SignUp";
+                        String restURL = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/SignUp";
                         new RestOperation().execute(restURL, mEmail.getText().toString(), mPassword.getText().toString());
                     }
                 }
@@ -73,6 +76,7 @@ public class signUp extends AppCompatActivity {
                 url = new URL(params[0]);
                 String username = new String(params[1]) ;
                 String password = new String(params[2]) ;
+                user_id = username;
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
@@ -121,7 +125,10 @@ public class signUp extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if(result.contains("1")) {
-                startActivity(new Intent(getApplicationContext(), Main3Activity.class));
+                final Intent i = new Intent (activityReference, MultiTrackerActivity.class);
+                i.putExtra("user_id", user_id);
+                startActivity(i);
+                //startActivity(new Intent(getApplicationContext(),MultiTrackerActivity.class));
             }
             else{
                 Toast.makeText(getApplication(), "Email already exists", Toast.LENGTH_LONG).show();
