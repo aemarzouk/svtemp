@@ -17,7 +17,7 @@
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
     <init-param>
         <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>book</param-value>
+        <param-value>Rest</param-value>
     </init-param>
     
 </servlet>
@@ -28,7 +28,7 @@
 
 <servlet>
 <servlet-name>SignUp</servlet-name>
- <servlet-class>book.SignUp</servlet-class>
+ <servlet-class>Rest.SignUp</servlet-class>
 </servlet> 
 <servlet-mapping>
 <servlet-name>SignUp</servlet-name>
@@ -37,7 +37,7 @@
 
 <servlet>
 <servlet-name>SignIn</servlet-name>
- <servlet-class>book.SignIn</servlet-class>
+ <servlet-class>Rest.SignIn</servlet-class>
 </servlet> 
 <servlet-mapping>
 <servlet-name>SignIn</servlet-name>
@@ -46,7 +46,7 @@
 
 <servlet>
 <servlet-name>BuyItem</servlet-name>
- <servlet-class>book.BuyItem</servlet-class>
+ <servlet-class>Rest.BuyItem</servlet-class>
 </servlet> 
 <servlet-mapping>
 <servlet-name>BuyItem</servlet-name>
@@ -55,7 +55,7 @@
 
 <servlet>
 <servlet-name>GetItems</servlet-name>
- <servlet-class>book.GetItems</servlet-class>
+ <servlet-class>Rest.GetItems</servlet-class>
 </servlet> 
 <servlet-mapping>
 <servlet-name>GetItems</servlet-name>
@@ -64,7 +64,7 @@
 
 <servlet>
 <servlet-name>GetItemsInfo</servlet-name>
- <servlet-class>book.GetItemsInfo</servlet-class>
+ <servlet-class>Rest.GetItemsInfo</servlet-class>
 </servlet> 
 <servlet-mapping>
 <servlet-name>GetItemsInfo</servlet-name>
@@ -73,7 +73,7 @@
 
 <servlet>
 <servlet-name>test_html</servlet-name>
- <servlet-class>book.test_html</servlet-class>
+ <servlet-class>Rest.test_html</servlet-class>
 </servlet> 
 <servlet-mapping>
 <servlet-name>test_html</servlet-name>

@@ -13,9 +13,13 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Users/Mahmoud/Downloads/json/json-simple-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Mahmoud/Downloads/json/org.json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Mahmoud/Downloads/commons-logging-1.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Mahmoud/Downloads/json/java-json.jar"/>
+	<classpathentry kind="lib" path="JARs/commons-logging-1.1.2.jar"/>
+	<classpathentry kind="lib" path="JARs/java-json.jar"/>
+	<classpathentry kind="lib" path="JARs/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="JARs/org.json.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
