@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	<display-name>SVRest</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<servlet>
+    <description>IBM JAX-RS service</description>
+    <display-name>IBM JAX-RS service</display-name>
+    <servlet-name>IBMJAXRS</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+    <init-param>
+        <param-name>jersey.config.server.provider.packages</param-name>
+        <param-value>book</param-value>
+    </init-param>
+    
+</servlet>
+<servlet-mapping>
+    <servlet-name>IBMJAXRS</servlet-name>
+    <url-pattern>/jaxrs/*</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>SignUp</servlet-name>
+ <servlet-class>book.SignUp</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>SignUp</servlet-name>
+ <url-pattern>/jaxrs/SignUp</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>SignIn</servlet-name>
+ <servlet-class>book.SignIn</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>SignIn</servlet-name>
+ <url-pattern>/jaxrs/SignIn</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>BuyItem</servlet-name>
+ <servlet-class>book.BuyItem</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>BuyItem</servlet-name>
+ <url-pattern>/jaxrs/BuyItem</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>GetItems</servlet-name>
+ <servlet-class>book.GetItems</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>GetItems</servlet-name>
+ <url-pattern>/jaxrs/GetItems</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>GetItemsInfo</servlet-name>
+ <servlet-class>book.GetItemsInfo</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>GetItemsInfo</servlet-name>
+ <url-pattern>/jaxrs/GetItemsInfo</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>test_html</servlet-name>
+ <servlet-class>book.test_html</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>test_html</servlet-name>
+ <url-pattern>/jaxrs/test_html</url-pattern>
+</servlet-mapping>
+
+
+</web-app>
