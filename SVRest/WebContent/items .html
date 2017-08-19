@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Swift Vending</title>
+     
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/sb-admin.css" rel="stylesheet">
+
+  </head>
+
+  <body class="fixed-nav" id="page-top" ng-app="myModule"   >
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <a class="navbar-brand" href="#">Swift Vending</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav navbar-sidenav">
+          <li class="nav-item active" data-toggle="tooltip" data-placement="right" title="Dashboard">
+            <a class="nav-link" href="index.html">
+              <i class="fa fa-fw fa-dashboard"></i>
+              <span class="nav-link-text">
+                Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Charts">
+            <a class="nav-link" href="Users.html">
+              <i class="fa fa-user"></i>
+              <span class="nav-link-text">
+                Manage Users</span>
+            </a>
+          </li>
+          <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+            <a class="nav-link" href="items%20.html">
+              <i class= "fa fa-pencil fa-fw"></i>
+              <span class="nav-link-text">
+                Manage Items</span>
+            </a>
+          </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tables">
+            <a class="nav-link" href="#">
+              <i class="fa fa-cogs"></i>
+              <span class="nav-link-text">
+                Manage Vending Machine</span>
+            </a>
+          </li>
+        </ul>
+        <ul class="navbar-nav sidenav-toggler">
+         
+          <li class="nav-item">
+            <form class="form-inline my-2 my-lg-0 mr-lg-2">
+              <div class="input-group">
+            </form>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+              <i class="fa fa-fw fa-sign-out"></i>
+              Logout</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="content-wrapper py-3">
+
+      <div class="container-fluid">
+
+        <!-- Breadcrumbs -->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="index.html">Dashboard</a>
+          </li>
+          <li class="breadcrumb-item active">Manage Items</li>
+        </ol>
+
+
+        <!-- Example Tables Card -->
+          <div class="card mb-2" style="border:white ">
+          
+           <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal" style="width: 20%; margin-left: 80%;">Add Item</button>
+
+          </div>
+          
+          <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog" >
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add New Item</h4>
+        </div>
+        <div class="modal-body" ng-controller="myCtontroller" >
+                      <div class="form-group">
+                        <label for="id">id:</label>
+                        <input  class="form-control" id="id" ng-model="id" >
+                      </div>
+                      <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input  class="form-control" id="name"  ng-model="name">
+                      </div>
+                        <div class="form-group">
+                        <label for="number">Number:</label>
+                        <input  class="form-control" id="number" ng-model="number">
+                      </div>
+                       <div class="form-group">
+                         <label for="exp">Expiry Date:</label>
+                        <input  class="form-control" id="exp" ng-model="expiry">
+                        </div>
+                        <div class="form-group">
+                         <label for="Calories">Calories:</label>
+                        <input  class="form-control" id="cal" ng-model="cal">
+                        </div>
+                        <div class="form-group">
+                         <label for="type">Type:</label>
+                        <input  class="form-control" id="type" ng-model="type">
+                        </div>
+            
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="addItem()" data-dismiss="modal" >Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fa fa-table"></i>
+            Data Table Example
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" ng-controller="myCtrl">
+                <thead>
+                  <tr >
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Expiry Date</th>
+                    <th>Calories</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="x in records">
+                    <td>{{x.id}}</td>
+                    <td>{{x.name}}</td>
+                    <td>{{x.number}}</td>
+                    <td>{{x.type}}</td>
+                    <td>{{x.price}}</td>
+                    <td>{{x.expiry}}</td>
+                      <td>{{x.cal}}</td>
+                  </tr>
+    
+                 
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer small text-muted">
+            Updated yesterday at 11:59 PM
+          </div>
+        </div>
+
+      </div>
+      <!-- /.container-fluid -->
+
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Scroll to Top Button -->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Select "Logout" below if you are ready to end your current session.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/sb-admin.min.js"></script>
+        <script>
+        var app = angular.module('myModule', []);
+        app.controller('myCtontroller', function ($scope, $http, $log) {
+            $scope.addItem() = function(){
+            var data = '{"id":'+$scope.id +',"name":'+$scope.name + ',"number":'+$scope.number + ',"price":'+$scope.price+ ',"calories":'+$scope.cal + ',"type":'+$scope.type + ',"expiry_date":'+$scope.expiry +'}';
+            var config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            $http.post('/SVRest/jaxrs/GetItemsInfo', data, config)
+                .then(function (response, status, headers, config) {
+                    console.log(response.data);
+                }, function myError(response) {
+                    console.log(response.statusText);
+                }, function (reason) {
+                    console.log(reason);
+                });
+
+
+}
+
+        });
+    </script>
+  </body>
+
+</html>
