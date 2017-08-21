@@ -57,10 +57,25 @@ public class GetItems extends HttpServlet {
 			try {
 				jsonResponse = (JSONObject) new JSONTokener(user_info).nextValue();
 				 user_id = jsonResponse.getString("_id");
+					String session_id= request.getHeader("sessionID");
+					Cloudant_Client get_client = new Cloudant_Client() ;
+					// check session and user matching 
+					String user_url="https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/"+user_id; 
+					JSONObject user_request = new JSONObject(get_client.Get_Function(user_url));// new JSONTokener(get_client.Get_Function(user_url)).nextValue();
+					// get item to be bought from springs
+					if(!session_id.equals(user_request.getString("sessionID"))) {
+						out.println("Authentication Error!");
+						out.println(session_id);
+						
+						out.println(user_request.getString("sessionID"));
+						return;
+					}
 			}catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			/// Blockchain JSON 
 			String url = "https://c0dc93abf3f1451db1699a6e953d42aa-vp1.us.blockchain.ibm.com:5004/chaincode";
             String json = "{\"jsonrpc\": \"2.0\",\"method\": \"query\",\"params\": {\"type\": 1,\"chaincodeID\": { \"name\": \"b4188327a5b30d43457e7cc55ba0f6b64348746532588b791f68b3ad9760d996ceabd152846f4e78aafddf2de233b0e9ef77d62e319c902e66a984bb483da34a\"},\"ctorMsg\": {\"function\": \"read\",\"args\": [\""+user_id+"\" ]},\"secureContext\": \"user_type1_1\"},\"id\": 1}"; 
             Watson_Blockchain_Client  post_client = new Watson_Blockchain_Client() ; 

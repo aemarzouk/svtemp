@@ -49,6 +49,7 @@ public class SignUp extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			PrintWriter out = response.getWriter();
 			String json = "";
+			request.getSession(); 
             BufferedReader br = new BufferedReader(new  InputStreamReader(request.getInputStream()));
             if(br != null) {
                 json = br.readLine();
@@ -67,11 +68,13 @@ public class SignUp extends HttpServlet {
 	                    String password = jsonResponse.getString("password");
 	                    Hashing_Password Hash = new Hashing_Password();
 	                    jsonResponse.remove("password");
-	                    jsonResponse.put("type", "user") ; 
+	                    jsonResponse.put("type", "user"); 
+	                    jsonResponse.put("sessionID", "null");
 	                    jsonResponse.put("password", Hash.getSaltedHash(password));
 	                    //Hash.getSaltedHash(password);
 	                    json = jsonResponse.toString();
 	                    client.Post_Function(post_url, json);
+	                    
 	                    out.print(1);   //Username available 
 	                }
 				} 

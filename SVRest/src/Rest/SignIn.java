@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,6 +59,7 @@ public class SignIn extends HttpServlet {
 				Cloudant_Client client = new Cloudant_Client() ; 
 				JSONObject jsonResponse = (JSONObject) new JSONTokener(json).nextValue();
 				String username = jsonResponse.getString("_id");
+				String SessionID=request.getHeader("Cookie"); 
 				String password = jsonResponse.getString("password");
 				//Check username and password is valid
 				String url ="https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/"+ username;
@@ -71,8 +73,22 @@ public class SignIn extends HttpServlet {
                 Hashing_Password Hash = new Hashing_Password();
                 //password.equals(output)
                 if(Hash.check(password, output)){
-                	 
-                	 	out.print(1);   //password correct
+                	 	
+                		if(password_request.getString("sessionID").equals("null")) {
+                			
+                			UUID uuid = UUID.randomUUID();
+                	        String randomUUIDString = uuid.toString();
+                	        password_request.remove("sessionID"); 
+                	        password_request.put("sessionID", randomUUIDString); 
+                	       if(client.Put_Function(url, password_request.toString()))
+                	       {out.print(randomUUIDString);}
+                	       else
+                	       {out.print(3);}  // Failure to connect 
+                		}
+                		else {
+                			out.print("Account is already logged in");
+                		}
+                	 	
                  }
                  else{
                 	 	out.print(0);   //password incorrect

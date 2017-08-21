@@ -62,19 +62,32 @@ public class BuyItem extends HttpServlet {
         if(br != null) {
             json = br.readLine();
 			try {
+				// 
 				JSONObject jsonResponse = (JSONObject) new JSONTokener(json).nextValue();
 				String spring_id = jsonResponse.getString("spring_id");
 				String user_id = jsonResponse.getString("user_id");
-				String spring_url = "https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/springs";
-				Cloudant_Client get_client = new Cloudant_Client() ; 
+				String session_id= request.getHeader("sessionID");
+				Cloudant_Client get_client = new Cloudant_Client() ;
+				// check session and user matching 
+				String user_url="https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/"+user_id; 
+				JSONObject user_request = new JSONObject(get_client.Get_Function(user_url));// new JSONTokener(get_client.Get_Function(user_url)).nextValue();
+				// get item to be bought from springs
+				if(!session_id.equals(user_request.getString("sessionID"))) {
+					out.println("Authentication Error!");
+					out.println(session_id);
+					out.println(user_request.getString("sessionID"));
+					return;
+				}
+				String spring_url = "https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/springs"; 
 				JSONObject springs_request = (JSONObject) new JSONTokener(get_client.Get_Function(spring_url)).nextValue();
 				String item_id = springs_request.getString("spring_" + spring_id);
+				// retrieve item info
 				String url = "https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/"+ item_id;
 				JSONObject update_request = (JSONObject) new JSONTokener(get_client.Get_Function(url)).nextValue();		           
 		        String item_name = update_request.getString("name");
   //----------------------------------------------------------------------------------
-		        
-		            
+		          // increment no of transactions of a certain user            
+	
 		String Url = "https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/trans_number";
         JSONObject Update_request = (JSONObject) new JSONTokener(get_client.Get_Function(Url)).nextValue();		           
         Integer trans_number = Update_request.getInt("number");
@@ -88,10 +101,18 @@ public class BuyItem extends HttpServlet {
         get_client.Put_Function(put_url, trans_content);
 //---------------------------------------------------------------------------------       
 				//WatsonServiceID(UpdateCloudant(item_id));
-        		UpdateCloudant(item_id);
+        	boolean result=UpdateCloudant(item_id);
+        	if(!result)
+             {
+        		out.print(0);
+             }
+        	else{
+        				
         		WatsonServiceID(spring_id);
 				UpdateBlockChain(user_id , item_id , item_name , trans_number.toString());
 				//out.print(UpdateCloudant(item_id));
+				out.print(1);
+        	}
 			}
 			    catch (JSONException e) {
 				e.printStackTrace();
@@ -99,24 +120,30 @@ public class BuyItem extends HttpServlet {
         }
 	}
 	
-	protected void UpdateCloudant(String item_id) throws IOException, JSONException
+	protected boolean UpdateCloudant(String item_id) throws IOException, JSONException
+	
 	{
+		
 		Cloudant_Client get_client = new Cloudant_Client() ; 
 		BufferedReader br = null;
 		//String item_place = "";
 		String url ="https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/"+ item_id;
-	    JSONObject update_request = (JSONObject) new JSONTokener(get_client.Get_Function(url)).nextValue();
+	    JSONObject update_request = (JSONObject) new JSONTokener(get_client.Get_Function(url)).nextValue(); // return a string which we make the JSON object with 
         //item_place = update_request.getString("item_place");
-        Integer item_amount = update_request.getInt("number")  ;
-        if(item_amount==0){ return; } 
+        Integer item_amount = update_request.getInt("number");  // to decrement no of items 
+        if(item_amount==0){ return false; } 
         item_amount-- ; 
+        // update number 
         update_request.remove("number");
         update_request.put("number",item_amount.toString());
         String content = update_request.toString();
         String Put_url = "https://438b72b2-6a3a-438e-8805-69fe9c879004-bluemix.cloudant.com/svdb/"+ item_id;
         get_client.Put_Function(Put_url, content);
 	    //return item_place;
+        return true; 
+
 	}
+	
 	protected void UpdateBlockChain(String user_id, String item_id , String item_name , String trans_number) throws IOException
 	{ 
 		String url = "https://c0dc93abf3f1451db1699a6e953d42aa-vp1.us.blockchain.ibm.com:5004/chaincode";

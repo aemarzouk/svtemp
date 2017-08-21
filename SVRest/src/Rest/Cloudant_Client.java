@@ -14,8 +14,8 @@ import org.json.JSONTokener;
 
 public class Cloudant_Client {
 
-	public void Put_Function(String url , String json) throws IOException{
-		BufferedReader br = null ; 
+	public boolean Put_Function(String url , String json) throws IOException{
+		 BufferedReader br = null ; 
 		 URL put_url = new URL(url);
          HttpURLConnection put_connection = (HttpURLConnection) put_url.openConnection();	
          String userCredentials = "wheyetandedismingrappiet" + ":" + "365f0f4f35f04a184a5823f0f3ee5d236a746337";
@@ -32,11 +32,15 @@ public class Cloudant_Client {
          int put_httpCode = put_connection.getResponseCode();
          if (put_httpCode == 201) {
              br = new BufferedReader(new InputStreamReader(put_connection.getInputStream()));
+             put_connection.disconnect();
+             return true; 
          } else {
          	
              br = new BufferedReader(new InputStreamReader(put_connection.getErrorStream()));
+             put_connection.disconnect();
+             return false;
          }
-         put_connection.disconnect();
+        
 	}
 	
 	
@@ -67,7 +71,7 @@ public class Cloudant_Client {
         connection.disconnect();
 		return content ; 
 	}
-	public void Post_Function (String url , String json) throws IOException{
+	public boolean Post_Function (String url , String json) throws IOException{
 		BufferedReader  br =null ; 
 		URL post_url = new URL(url) ; 
         HttpURLConnection post_connection = (HttpURLConnection) post_url.openConnection();	
@@ -85,9 +89,50 @@ public class Cloudant_Client {
         int post_httpCode =post_connection.getResponseCode();
         if (post_httpCode == 201) {
             br = new BufferedReader(new InputStreamReader(post_connection.getInputStream()));
+            return true; 
         } else {
             br = new BufferedReader(new InputStreamReader(post_connection.getErrorStream()));
+            return false ; 
         }
 
+	}
+	
+	public boolean Delete_Function(String delete_url) throws IOException{
+	    BufferedReader br = null ; 	
+        String content = null ; 
+		URL url = new URL(delete_url);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	    String userCredentials = "wheyetandedismingrappiet" + ":" + "365f0f4f35f04a184a5823f0f3ee5d236a746337";
+	    String basicAuth = "Basic " + Base64.getEncoder().encodeToString(userCredentials.getBytes());
+	    connection.setRequestProperty("Authorization", basicAuth);
+//	    connection.setRequestProperty("Content-Type", "application/json");
+//        connection.setRequestProperty("Accept", "application/json");
+        connection.setRequestMethod("DELETE");
+        connection.setDoOutput(true);
+	    int httpCode = connection.getResponseCode();
+	    if (httpCode == 200) // success
+	    {
+		    br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		    StringBuilder sb = new StringBuilder();
+	        String line = null;
+	        while ((line = br.readLine()) != null) {
+	            sb.append(line);
+	            sb.append(System.getProperty("line.separator"));
+	        }
+	         content = sb.toString() ;
+	         connection.disconnect();
+	     if (content.contains( "true"))
+	        	return true; 
+	         else 
+	            return false; 
+	      
+	    }
+	    else {
+	    	br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+	    	connection.disconnect();
+	    	return false; 
+	    }
+		
+		
 	}
 }

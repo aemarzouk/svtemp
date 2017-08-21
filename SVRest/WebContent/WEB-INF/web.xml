@@ -81,4 +81,43 @@
 </servlet-mapping>
 
 
+
+<servlet>
+<servlet-name>AddItem</servlet-name>
+ <servlet-class>com.ibm.swiftvending.admin.AddItem</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>AddItem</servlet-name>
+ <url-pattern>/jaxrs/AddItem</url-pattern>
+</servlet-mapping>
+
+<servlet>
+<servlet-name>EditItem</servlet-name>
+ <servlet-class>com.ibm.swiftvending.admin.EditItem</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>EditItem</servlet-name>
+ <url-pattern>/jaxrs/EditItem</url-pattern>
+</servlet-mapping>
+
+
+<servlet>
+<servlet-name>DeleteItem</servlet-name>
+ <servlet-class>com.ibm.swiftvending.admin.DeleteItem</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>DeleteItem</servlet-name>
+ <url-pattern>/jaxrs/DeleteItem</url-pattern>
+</servlet-mapping>
+
+
+<servlet>
+<servlet-name>ManageMachine</servlet-name>
+ <servlet-class>com.ibm.swiftvending.admin.ManageMachine</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>ManageMachine</servlet-name>
+ <url-pattern>/jaxrs/ManageMachine</url-pattern>
+</servlet-mapping>
+
 </web-app>
