@@ -104,14 +104,14 @@ public class BuyItem extends HttpServlet {
         	boolean result=UpdateCloudant(item_id);
         	if(!result)
              {
-        		out.print(0);
+        		out.print("Item is not available");
              }
         	else{
         				
         		WatsonServiceID(spring_id);
 				UpdateBlockChain(user_id , item_id , item_name , trans_number.toString());
 				//out.print(UpdateCloudant(item_id));
-				out.print(1);
+				out.print("Item bought successfully");
         	}
 			}
 			    catch (JSONException e) {
