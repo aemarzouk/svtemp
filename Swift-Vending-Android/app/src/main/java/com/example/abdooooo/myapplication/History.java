@@ -163,7 +163,7 @@ public class History extends AppCompatActivity {
                 TextView tv2 = new TextView(activityReference);
                 tv2.setText("Time");
                 tv1.setTypeface(null, Typeface.BOLD);
-                tv2.setTextColor(Color.MAGENTA);
+                tv2.setTextColor(Color.DKGRAY);
                 tv2.setGravity(Gravity.RIGHT);
                 tv2.setTextSize(20);
                 tbrow0.addView(tv2);
