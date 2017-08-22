@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Vending Machine</string>
+    <!--<string name="app_name">Vending Machine</string>-->
     <string name="login">Login</string>
     <string name="login_dialog">Login</string>
     <string name="btn1_name">Order</string>

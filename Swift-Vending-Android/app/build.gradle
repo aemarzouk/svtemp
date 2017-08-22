@@ -1,6 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
+    //-- for png
+    aaptOptions.cruncherEnabled = false
+    aaptOptions.useNewCruncher = false
+
+    //--
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
     defaultConfig {

@@ -10,23 +10,33 @@
         android:layout_width="368dp"
         android:layout_height="495dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        tools:layout_editor_absoluteY="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="1">
+<FrameLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:hint="Name"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="209dp"
+        app:srcCompat="@drawable/logo" />
 
-                />
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="82dp"
+        android:layout_height="54dp"
+        app:srcCompat="@drawable/back"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="-15dp"/>
+</FrameLayout>
 
             <EditText
                 android:id="@+id/email"
@@ -36,16 +46,6 @@
                 android:inputType="textEmailAddress"
                 android:layout_marginTop="20dp"
                 android:hint="Email"
-                />
-
-            <EditText
-                android:id="@+id/phonenumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="phone"
-                android:layout_marginTop="20dp"
-                android:hint="Phone"
                 />
 
             <EditText
@@ -72,11 +72,14 @@
 
             <Button
                 android:id="@+id/signup"
-                android:layout_width="208dp"
+                android:layout_width="435dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.06"
+                android:layout_gravity="center"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="20dp"
                 android:text="Sign Up"
-                android:layout_gravity="center"/>
+                android:background="@drawable/login_shape"
+                />
 
         </LinearLayout>
 

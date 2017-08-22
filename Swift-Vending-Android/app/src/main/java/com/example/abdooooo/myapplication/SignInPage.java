@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class SignInPage extends AppCompatActivity {
+    private ProgressBar bar2;
     //String item_id;
     //public void SignInPage(String id){
     //    item_id=id;
@@ -30,6 +32,8 @@ public class SignInPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signin_page);
+        bar2 = (ProgressBar) findViewById(R.id.bar2);
+        bar2.setVisibility(View.GONE);
         activityReference=this;
 
 //        Button btn_button =(Button) findViewById(R.id.order);
@@ -56,11 +60,14 @@ public class SignInPage extends AppCompatActivity {
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                bar2.setVisibility(View.VISIBLE);
                 if(mEmail.getText().toString().isEmpty() ||mPassword.getText().toString().isEmpty() ){
                     Toast.makeText(getApplication(),"Please Enter Username and Password", Toast.LENGTH_LONG).show();
                 }
                 else {
                     Login(mEmail.getText().toString(), mPassword.getText().toString());
+
 
                 }
             }
@@ -76,7 +83,7 @@ public class SignInPage extends AppCompatActivity {
 
             //condition of login
             public void Login(String name, String password) {
-                    String url= "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/SignIn" ;
+                    String url= "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/SignIn" ;
                     user_id = name ;
                     new SignIn_check().execute(url , name , password);
             }
@@ -86,6 +93,9 @@ public class SignInPage extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+
+
         }
 
         @Override
@@ -148,13 +158,18 @@ public class SignInPage extends AppCompatActivity {
 
         @Override
         public void onPostExecute(String result) {
+
+
             if(result.contains("1")) {
+                bar2.setVisibility(View.INVISIBLE);
+
                 // open new activity
                 //new Buy_Item()
                 final Intent i = new Intent (activityReference, MultiTrackerActivity.class);
                 String item_id  = result;
                 i.putExtra("user_id", user_id);
                 startActivity(i);
+
                 //startActivity(new Intent(getApplicationContext(), MultiTrackerActivity.class));
             }
             else if (result.contains("2")){

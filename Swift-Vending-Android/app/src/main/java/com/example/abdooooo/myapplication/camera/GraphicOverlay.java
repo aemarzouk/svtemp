@@ -112,7 +112,7 @@ public class GraphicOverlay extends View {
          * system.
          */
         public float translateY(float y) {
-            return scaleY(y);
+            return scaleY(y)-200;
         }
 
         public void postInvalidate() {

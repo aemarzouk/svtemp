@@ -31,26 +31,7 @@
 
         </com.example.abdooooo.myapplication.camera.CameraSourcePreview>
 
-        <TextView
-            android:id="@+id/ItemInfo"
-            android:layout_width="match_parent"
-            android:layout_height="177dp"
-            android:layout_weight="1"
-            android:singleLine="false"
-            android:text="Item" />
-        <Button
-            android:id="@+id/BuyButton"
-            android:layout_width="match_parent"
-            android:layout_height="177dp"
-            android:layout_weight="1"
-            android:text=" Buy" />
-        <Button
-            android:id="@+id/CancelButton"
-            android:layout_width="match_parent"
-            android:layout_height="177dp"
-            android:layout_weight="1"
-            android:text=" Cancel" />
-
     </LinearLayout>
+
 
 </LinearLayout>

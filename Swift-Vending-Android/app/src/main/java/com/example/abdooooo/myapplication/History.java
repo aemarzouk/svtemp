@@ -3,11 +3,13 @@ package com.example.abdooooo.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -25,22 +27,26 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 
 public class History extends AppCompatActivity {
     private Activity activityReference;
     private ProgressBar loadingPb;
-
+//    private ImageView backbtn;
+//    private ImageView logoutbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        //------
         //progress bar
         loadingPb = (ProgressBar) findViewById(R.id.loadingPb);
         //----
 
-        String url = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/GetItems";
+        String url = "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/GetItems";
         Intent i = getIntent();
         String user_id = i.getStringExtra("user_id");
         String username = user_id;
@@ -58,6 +64,7 @@ public class History extends AppCompatActivity {
             super.onPreExecute();
             loadingPb.setVisibility(View.VISIBLE);
 
+
         }
 
         @Override
@@ -73,6 +80,7 @@ public class History extends AppCompatActivity {
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
+                connection.setRequestProperty("sessionID", "youmna1234");
                 connection.setRequestMethod("POST");
                 ////change the next line according to the object you want to post
                 String jsonObj ="{\"_id\":\""+username+"\"}"  ;
@@ -120,7 +128,11 @@ public class History extends AppCompatActivity {
         @Override
         public void onPostExecute(String result) {
             try {
-                loadingPb.setVisibility(View.INVISIBLE);
+
+                loadingPb.setVisibility(View.GONE);
+
+
+                //  Toast.makeText(getApplication(),result, Toast.LENGTH_LONG).show();
 
                 JSONObject j = (JSONObject) new JSONTokener(result).nextValue();
                 JSONArray trans = j.getJSONArray("Transactions");
@@ -130,20 +142,28 @@ public class History extends AppCompatActivity {
                 stk.setColumnStretchable(2,false);
                 TableRow tbrow0 = new TableRow(activityReference);
                 TextView tv0 = new TextView(activityReference);
+                tbrow0.setPadding(0,50,0,100);
+
                 tv0.setText("Item Name");
+                tv0.setPadding(20,0,0,0);
+                tv0.setTypeface(null, Typeface.BOLD);
                 tv0.setTextColor(Color.BLACK);
                 tv0.setTextSize(20);
-               // tv0.setGravity(Gravity.LEFT);
+
+                tv0.setGravity(Gravity.LEFT);
                 tbrow0.addView(tv0);
+
                 TextView tv1 = new TextView(activityReference);
                 tv1.setText("Date");
                 tv1.setTextColor(Color.BLACK);
                 tv1.setGravity(Gravity.CENTER);
+                tv1.setTypeface(null, Typeface.BOLD);
                 tv1.setTextSize(20);
                 tbrow0.addView(tv1);
                 TextView tv2 = new TextView(activityReference);
                 tv2.setText("Time");
-                tv2.setTextColor(Color.BLACK);
+                tv1.setTypeface(null, Typeface.BOLD);
+                tv2.setTextColor(Color.MAGENTA);
                 tv2.setGravity(Gravity.RIGHT);
                 tv2.setTextSize(20);
                 tbrow0.addView(tv2);
@@ -153,7 +173,8 @@ public class History extends AppCompatActivity {
                     TextView t1v = new TextView(activityReference);
                     t1v.setText(trans.getJSONObject(i).getString("item_name"));
                     t1v.setTextColor(Color.BLACK);
-                    t1v.setTextSize(20);
+                    t1v.setTextSize(17);
+                    tbrow.setPadding(35,0,0,0);
                     //t1v.setGravity(Gravity.LEFT);
                     tbrow.addView(t1v);
                     TextView t2v = new TextView(activityReference);

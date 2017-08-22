@@ -63,6 +63,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /*
  * Activity for the multi-tracker app.  This app detects faces and barcodes with the rear facing
@@ -81,6 +82,12 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
     private GraphicOverlay mGraphicOverlay;
 
     private GestureDetectorCompat gDetector;
+
+    private String ItemID;
+    public String Iteminfo;
+
+    AlertDialog ad;
+
 
     @Override
     public boolean onDown(MotionEvent e) {
@@ -127,9 +134,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
         return false;
     }
 
-    private Button BuyButton;
-    private Button CancelButton;
-    private TextView ItemInfo;
+
     private Button history;
 
 
@@ -158,22 +163,34 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
         });
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
-        ItemInfo = (TextView) findViewById(R.id.ItemInfo);
-        ItemInfo.setVisibility(View.INVISIBLE);
-        BuyButton = (Button) findViewById(R.id.BuyButton);
-        BuyButton.setVisibility(View.INVISIBLE);
-        // final Intent i = new Intent (this, SignInPage.class);
-        BuyButton.setOnClickListener(new View.OnClickListener() {
+
+        ad = new AlertDialog.Builder(this)
+                .setTitle("Item Info").setPositiveButton("Buy", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        String item_id = ItemID;
+                        Intent i = getIntent();
+                        String user_id = i.getStringExtra("user_id");
+                        String url = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/BuyItem";
+                        new buy_item().execute(url, user_id, item_id);
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Iteminfo="";
+                        // take action to dismiss
+                        ad.dismiss();
+
+                    }
+                }).setCancelable(false).create();
+
+
+//// BUY BUTTON ACTION
+/*        BuyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String item_id = result;
-                //i.putExtra("item_id", item_id);
-                //startActivity(i);
-                //SignInPage s = new SignInPage("");
-                //String item_id  = "";
-                //Intent i = new Intent (this, SignInPage.class);
-                //startActivity(new Intent(getApplicationContext(), SignInPage.class));
                 Intent i = getIntent();
                 String user_id = i.getStringExtra("user_id");
                 String url = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/BuyItem";
@@ -182,26 +199,11 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
 
             }
         });
+*/
 
-
-        CancelButton = (Button) findViewById(R.id.CancelButton);
-        CancelButton.setVisibility(View.INVISIBLE);
-
-        CancelButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                CancelButton.setVisibility(View.INVISIBLE);
-                BuyButton.setVisibility(View.INVISIBLE);
-                BuyButton.setText("Buy");
-                ItemInfo.setVisibility(View.INVISIBLE);
-                ItemInfo.setText("");
-
-            }
-        });
 
         this.gDetector = new GestureDetectorCompat(this, this);
         gDetector.setOnDoubleTapListener(this);
-
 
         // Check for the camera permission before accessing the camera.  If the
         // permission is not granted yet, request permission.
@@ -265,9 +267,6 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
         }
 
 
-
-
-
         @Override
         public void onPostExecute(String result) {
             Toast.makeText(getApplicationContext() , "Item bought successfully",Toast.LENGTH_LONG).show();
@@ -283,54 +282,35 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
         Log.d(TAG, "X press" +x );
         Log.d(TAG, "Y press" +y );
 
-       // Log.d(TAG,"Button Should be displayed");
-      /*  switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-            case MotionEvent.ACTION_UP:
-        } */
+
 
       float[] values;  Barcode B;   Rect r; boolean inside;
         for (GraphicOverlay.Graphic g: mGraphicOverlay.mGraphics)
         {
             if(g.GetBarcode().getBoundingBox().contains(x ,y-200))
             {
-                result=g.GetBarcode().displayValue;
-                Log.d(TAG , "Barcode Value"+result);
-                String url = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/GetItemsInfo" ;
-                new RestOperation().execute(url , result);
+              //  Toast.makeText(getApplicationContext() , "Retrieving item info...",Toast.LENGTH_SHORT).show();
+                ItemID=g.GetBarcode().displayValue;
+                Log.d(TAG , "Barcode Value"+ItemID);
+                String url = "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/GetItemsInfo" ;
 
+                new RestOperation().execute(url , ItemID);
 
+                   // Display alert dialog
 
-                BuyButton.setText("Buy Item "+result);
-                BuyButton.setVisibility(View.VISIBLE);
-                CancelButton.setVisibility(View.VISIBLE);
+                      Log.d(TAG,"ItemID"+ItemID);
+                      Log.d(TAG,"ItemInfo"+Iteminfo);
 
-                values=g.GetPosition();
                 r=g.GetBarcode().getBoundingBox();
                 inside= r.contains(x,y);
                 if (inside==true)
-                {
-                    Log.d(TAG,"Correct Press");}
+                {Log.d(TAG,"Correct Press");}
                 else
-                {
-                    Log.d(TAG,"NOT INSIDE");}
+                {Log.d(TAG,"NOT INSIDE");}
 
-
-                Log.d(TAG, "X press" +x );
-                Log.d(TAG, "Y press" +y );
-                Log.d(TAG, "1st Co-oridnate" +values[0]);
-                Log.d(TAG , "Rect x"+r.left);
-                Log.d(TAG, "2nd Co-oridnate" +values[1]);
-                Log.d(TAG, "3rd Co-oridnate" +values[2]);
-                Log.d(TAG, "4th Co-oridnate" +values[3]);
 
                 break;
-
-
             }
-
-
 
         }
         return true;
@@ -564,7 +544,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
 
         @Override
         protected String doInBackground(String... params) {
-
+         Log.d(TAG,"Inside thread");
             BufferedReader br = null;
             URL url;
             try {
@@ -573,6 +553,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
+                connection.setRequestProperty("sessionID", "youmna1234");
                 connection.setRequestMethod("POST");
                 ////change the next line according to the object you want to post
                 String jsonObj = "{\"item_id\":\""+result+"\"}";
@@ -617,7 +598,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
 
         @Override
         protected void onPostExecute(String result) {
-
+            Log.d(TAG,"Inside thread 2");
             try {
                 //JSONPObject jo = (JSONPObject) new JSONTokener(result).nextValue();
                 JSONObject jo = new JSONObject(result);
@@ -625,9 +606,10 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
                 String price = jo.getString("price");
                 String Expiry= jo.getString("expiry_date");
                 String Calories= jo.getString("calories");
-                ItemInfo.setVisibility(View.VISIBLE);
-                ItemInfo.setText("Name : "+name+"\t"+ "Price: "+price+"\n"+"Expiry : "+Expiry+"\t"+"Calories : "+Calories);
-
+                Iteminfo= "Name : "+name+"\t"+ "Price: "+price+"\n"+"Expiry : "+Expiry+"\t"+"Calories : "+Calories;
+               Log.d(TAG, "Item Info from inside:"+ Iteminfo);
+                ad.setMessage(Iteminfo);
+                ad.show();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

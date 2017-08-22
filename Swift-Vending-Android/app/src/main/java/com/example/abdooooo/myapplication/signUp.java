@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +40,13 @@ public class signUp extends AppCompatActivity {
         final EditText mEmail = (EditText) findViewById(R.id.email);
         final EditText mPassword = (EditText) findViewById(R.id.pass);
         final EditText cPassword = (EditText) findViewById(R.id.confirmPass);
+        final ImageView backbtn= (ImageView) findViewById(R.id.back);
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), SignInPage.class));
+            }
+        });
 
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -57,12 +65,13 @@ public class signUp extends AppCompatActivity {
 
     private class RestOperation extends AsyncTask<String, Void, String> {
         String error;
-        TextView t = (TextView) findViewById(R.id.textView);
+       // TextView t = (TextView) findViewById(R.id.textView);
 
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
