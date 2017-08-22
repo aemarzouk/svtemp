@@ -108,17 +108,20 @@ span.psw {
 
 
            
-            var data = '{"username":'+$scope.username +',"password":'+$scope.password +'}';
+            var data = '{"_id":'+$scope.username +',"password":'+$scope.password +'}';
             var config = {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'sessionID':'6fc8a322-a64d-453d-bfe3-3c3d63d6b568'
+         
                 }
             }
             $scope.login = function(){
-            var data = '{"username":'+$scope.username +',"password":'+$scope.password +'}';
+            var data = '{"_id":'+$scope.username +',"password":'+$scope.password +'}';
             var config = {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                      'sessionID':'6fc8a322-a64d-453d-bfe3-3c3d63d6b568'
                 }
             }
             $http.post('/SVRest/jaxrs/SignIn', data, config)

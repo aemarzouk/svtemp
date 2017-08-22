@@ -116,29 +116,22 @@
         </div>
         <div class="modal-body"  >
                       <div class="form-group">
-                        <label for="id">id:</label>
-                        <input  class="form-control" id="id" ng-model="id" >
+                        <label for="spring1">Spring1:</label>
+                        <input  class="form-control" id="spring1" ng-model="spring1" >
                       </div>
                       <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input  class="form-control" id="name"  ng-model="name">
+                        <label for="spring2">Spring2:</label>
+                        <input  class="form-control" id="spring2"  ng-model="spring2">
+                      </div>
+                      <div class="form-group">
+                        <label for="spring3">Spring3:</label>
+                        <input  class="form-control" id="spring3"  ng-model="spring3">
                       </div>
                         <div class="form-group">
-                        <label for="number">Number:</label>
-                        <input  class="form-control" id="number" ng-model="number">
+                        <label for="spring4">Spring4:</label>
+                        <input  class="form-control" id="spring4"  ng-model="spring4">
                       </div>
-                       <div class="form-group">
-                         <label for="exp">Expiry Date:</label>
-                        <input  class="form-control" id="exp" ng-model="expiry">
-                        </div>
-                        <div class="form-group">
-                         <label for="Calories">Calories:</label>
-                        <input  class="form-control" id="cal" ng-model="cal">
-                        </div>
-                        <div class="form-group">
-                         <label for="Calories">Price:</label>
-                        <input  class="form-control" id="price" ng-model="price">
-                        </div>
+                     
             
             
         </div>
@@ -152,26 +145,23 @@
         <div class="card mb-3" ng-app="myModule">
           <div class="card-header">
             <i class="fa fa-table"></i>
-            Items
+             Vending Machine
           </div>
-          <div class="card-body" ng-controller="contrl" >
+          <div class="card-body" ng-controller="contrl" data-ng-init="items()">
             <div class="table-responsive">
-              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" ng-init="items()">
+              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" >
                 <thead>
                   <tr >
-                 
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Expiry Date</th>
-                    <th>Calories</th>
+                      <th>id </th>
+                    <th>Spring</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="data in mydata">
-                    <td>{{data.name}}</td>
-                    <td>{{data.price}}</td>
-                    <td>{{data.expiry_date}}</td>
-                      <td>{{data.calories}}</td>
+                  <tr ng-repeat="x in records">
+                    <td>{{x.id}}</td>
+                    <td>{{x.spring}}</td>
+                   
                   </tr>
     
                  
@@ -233,13 +223,13 @@
         var app = angular.module('myModule', []);
         app.controller('myController', function ($scope, $http, $log) {
             $scope.addItem = function(){
-            var data = '{"_id":'+$scope.id +',"name":'+$scope.name + ',"number":'+$scope.number + ',"price":'+$scope.price+ ',"calories":'+$scope.cal +  ',"expiry_date":'+$scope.expiry +'}';
+            var data = '{"spring_1":'+$scope.spring1 +',"spring_2":'+$scope.spring_2            +',"spring_3":'+$scope.spring_3  +',"spring_4":'+$scope.spring_4' }';
             var config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            $http.post('/SVRest/jaxrs/AddItem', data, config)
+            $http.post('/jaxrs/ManageMachine', data, config)
                 .then(function (response, status, headers, config) {
                     console.log("hena");
                     console.log(response.data);
@@ -249,29 +239,12 @@
                     console.log(reason);
                 });
 
-          }
-          });
-       
-    app.controller('contrl', function ($scope, $http, $log) {
-        $scope.items = function(){
-   
-          $scope.mydata=[];
-     $http.get('/SVRest/jaxrs/Items').then(function (response, status, headers, config) {
-                    console.log("hena");
-                    $scope.mydata = response.data;
-                    console.log(response.data);
-                }, function myError(response) {
-                    console.log(response.statusText);
-                }, function (reason) {
-                    console.log(reason);
-                });
-
 
 }
-    });
-    
-  
-    </script>
+
+        });
+        </script>
+     
   </body>
 
 </html>

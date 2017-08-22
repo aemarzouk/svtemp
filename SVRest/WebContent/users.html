@@ -93,85 +93,42 @@
           <li class="breadcrumb-item">
             <a href="index.html">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Manage Items</li>
+          <li class="breadcrumb-item active">Manage Users</li>
         </ol>
 
 
         <!-- Example Tables Card -->
-          <div class="card mb-2" style="border:white ">
-          
-           <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal" style="width: 20%; margin-left: 80%;">Add Item</button>
-
-          </div>
+    
           
           <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog" >
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content" ng-controller="myController">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Add New Item</h4>
-        </div>
-        <div class="modal-body"  >
-                      <div class="form-group">
-                        <label for="id">id:</label>
-                        <input  class="form-control" id="id" ng-model="id" >
-                      </div>
-                      <div class="form-group">
-                        <label for="name">Name:</label>
-                        <input  class="form-control" id="name"  ng-model="name">
-                      </div>
-                        <div class="form-group">
-                        <label for="number">Number:</label>
-                        <input  class="form-control" id="number" ng-model="number">
-                      </div>
-                       <div class="form-group">
-                         <label for="exp">Expiry Date:</label>
-                        <input  class="form-control" id="exp" ng-model="expiry">
-                        </div>
-                        <div class="form-group">
-                         <label for="Calories">Calories:</label>
-                        <input  class="form-control" id="cal" ng-model="cal">
-                        </div>
-                        <div class="form-group">
-                         <label for="Calories">Price:</label>
-                        <input  class="form-control" id="price" ng-model="price">
-                        </div>
-            
-            
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" ng-click="addItem()" data-dismiss="modal" >Close</button>
-        </div>
-      </div>
-      
-    </div>
-  </div>
+ 
         <div class="card mb-3" ng-app="myModule">
           <div class="card-header">
             <i class="fa fa-table"></i>
-            Items
+            Transactions 
           </div>
-          <div class="card-body" ng-controller="contrl" >
+          <div class="card-body" ng-controller="contrl" data-ng-init="items()">
             <div class="table-responsive">
-              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" ng-init="items()">
+              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" >
                 <thead>
                   <tr >
-                 
+                    <th>ID</th>
                     <th>Name</th>
+                    <th>item</th>
                     <th>Price</th>
-                    <th>Expiry Date</th>
-                    <th>Calories</th>
+                    <th> Date</th>
+                    
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="data in mydata">
+                    <td>{{data.id}}</td>
                     <td>{{data.name}}</td>
-                    <td>{{data.price}}</td>
-                    <td>{{data.expiry_date}}</td>
-                      <td>{{data.calories}}</td>
+                    <td>{{data.item}}</td>
+
+                    <td>{{data.date}}</td>
+                    <td>{{x.price}}</td>
+                      
                   </tr>
     
                  
@@ -229,34 +186,18 @@
 
     <!-- Custom scripts for this template -->
     <script src="js/sb-admin.min.js"></script>
+  
         <script>
         var app = angular.module('myModule', []);
-        app.controller('myController', function ($scope, $http, $log) {
-            $scope.addItem = function(){
-            var data = '{"_id":'+$scope.id +',"name":'+$scope.name + ',"number":'+$scope.number + ',"price":'+$scope.price+ ',"calories":'+$scope.cal +  ',"expiry_date":'+$scope.expiry +'}';
-            var config = {
+    app.controller('contrl', function ($scope, $http, $log) {
+        $scope.items = function(){
+     var config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            $http.post('/SVRest/jaxrs/AddItem', data, config)
-                .then(function (response, status, headers, config) {
-                    console.log("hena");
-                    console.log(response.data);
-                }, function myError(response) {
-                    console.log(response.statusText);
-                }, function (reason) {
-                    console.log(reason);
-                });
-
-          }
-          });
-       
-    app.controller('contrl', function ($scope, $http, $log) {
-        $scope.items = function(){
-   
-          $scope.mydata=[];
-     $http.get('/SVRest/jaxrs/Items').then(function (response, status, headers, config) {
+         $scope.mydata =[];
+     $http.get(SVRest/jaxrs/GetItems).then(function (response, status, headers, config) {
                     console.log("hena");
                     $scope.mydata = response.data;
                     console.log(response.data);
