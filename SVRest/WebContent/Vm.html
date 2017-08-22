@@ -93,25 +93,20 @@
           <li class="breadcrumb-item">
             <a href="index.html">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Manage Items</li>
+          <li class="breadcrumb-item active">Manage Vending Machine</li>
         </ol>
 
 
         <!-- Example Tables Card -->
-          <div class="card mb-2" style="border:white ">
-          
-           <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal" style="width: 20%; margin-left: 80%;">Add Item</button>
-
-          </div>
+       
           
           <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog" >
-    <div class="modal-dialog">
+  <div >
+    <div >
     
       <!-- Modal content-->
-      <div class="modal-content" ng-controller="myController">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <div  ng-controller="myController">
+        <div>
           <h4 class="modal-title">Add New Item</h4>
         </div>
         <div class="modal-body"  >
@@ -136,48 +131,13 @@
             
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" ng-click="addItem()" data-dismiss="modal" >Close</button>
+          <button type="Save" class="btn btn-primary" ng-click="addItem()" >Save</button>
         </div>
       </div>
       
     </div>
   </div>
-        <div class="card mb-3" ng-app="myModule">
-          <div class="card-header">
-            <i class="fa fa-table"></i>
-             Vending Machine
-          </div>
-          <div class="card-body" ng-controller="contrl" data-ng-init="items()">
-            <div class="table-responsive">
-              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" >
-                <thead>
-                  <tr >
-                      <th>id </th>
-                    <th>Spring</th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr ng-repeat="x in records">
-                    <td>{{x.id}}</td>
-                    <td>{{x.spring}}</td>
-                   
-                  </tr>
-    
-                 
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card-footer small text-muted">
-            Updated yesterday at 11:59 PM
-          </div>
-        </div>
-
-      </div>
-      <!-- /.container-fluid -->
-
-    </div>
+     
     <!-- /.content-wrapper -->
 
     <!-- Scroll to Top Button -->
@@ -223,7 +183,7 @@
         var app = angular.module('myModule', []);
         app.controller('myController', function ($scope, $http, $log) {
             $scope.addItem = function(){
-            var data = '{"spring_1":'+$scope.spring1 +',"spring_2":'+$scope.spring_2            +',"spring_3":'+$scope.spring_3  +',"spring_4":'+$scope.spring_4' }';
+            var data = '{"spring_1":'+$scope.spring1 +',"spring_2":'+ $scope.spring_2 +',"spring_3":'+$scope.spring_3  +',"spring_4":'+$scope.spring_4' }';
             var config = {
                 headers: {
                     'Content-Type': 'application/json'

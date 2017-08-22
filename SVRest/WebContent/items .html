@@ -30,7 +30,6 @@
   </head>
 
   <body class="fixed-nav" id="page-top" ng-app="myModule"    >
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
       <a class="navbar-brand" href="#">Swift Vending</a>
@@ -155,6 +154,7 @@
             Items
           </div>
           <div class="card-body" ng-controller="contrl" >
+          
             <div class="table-responsive">
               <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" ng-init="items()">
                 <thead>
@@ -233,16 +233,17 @@
         var app = angular.module('myModule', []);
         app.controller('myController', function ($scope, $http, $log) {
             $scope.addItem = function(){
-            var data = '{"_id":'+$scope.id +',"name":'+$scope.name + ',"number":'+$scope.number + ',"price":'+$scope.price+ ',"calories":'+$scope.cal +  ',"expiry_date":'+$scope.expiry +'}';
-            var config = {
+ var data = '{"_id":"'+$scope.id +'","name": "'+$scope.name + '" ,"number": "'+$scope.number + ' ","price": "'+$scope.price+ ' ","calories": "'+$scope.cal +  '" ,"expiry_date": "'+$scope.expiry +'"}';            var config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
             $http.post('/SVRest/jaxrs/AddItem', data, config)
                 .then(function (response, status, headers, config) {
-                    console.log("hena");
+                    console.log("added");
                     console.log(response.data);
+                     window.location.href="items.html";
+                    
                 }, function myError(response) {
                     console.log(response.statusText);
                 }, function (reason) {
@@ -260,6 +261,7 @@
                     console.log("hena");
                     $scope.mydata = response.data;
                     console.log(response.data);
+                    
                 }, function myError(response) {
                     console.log(response.statusText);
                 }, function (reason) {
