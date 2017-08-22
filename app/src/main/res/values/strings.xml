@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Vending Machine</string>
+    <string name="login">Login</string>
+    <string name="login_dialog">Login</string>
+    <string name="btn1_name">Order</string>
+    <string name="btn2_name">Item info</string>
+    <string name="btn3_name">Rates</string>
+    <string name="title_activity_main2">Buy Items</string>
+
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Logout</string>
+    <string-array name="spinner">
+        <item> Male</item>
+        <item>Female</item>
+
+
+    </string-array>
+
+
+    <!-- Strings related to SignInPage-->
+    <string name="scan_barcode_button">Scan barcode</string>
+    <string name="no_barcode_captured">No barcode captured</string>
+    <string name="barcode_error_format">"Error reading barcode: %1$s"</string>
+
+    <!-- Strings related to barcode scanner -->
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage </string>
+    <!-- Preference File String --> preference_file_key
+    <string name="preference_file_key">pfk1234</string>
+    <string name="sessionID">sessionID</string>
+    <string name="userID">userID</string>
+</resources>
