@@ -19,6 +19,10 @@
         <param-name>jersey.config.server.provider.packages</param-name>
         <param-value>Rest</param-value>
     </init-param>
+    <init-param>
+        <param-name>jersey.config.server.provider.packages</param-name>
+        <param-value>com.ibm.swiftvending.admin</param-value>
+    </init-param>
     
 </servlet>
 <servlet-mapping>
@@ -120,4 +124,12 @@
  <url-pattern>/jaxrs/ManageMachine</url-pattern>
 </servlet-mapping>
 
+<servlet>
+<servlet-name>Logout</servlet-name>
+ <servlet-class>Rest.Logout</servlet-class>
+</servlet> 
+<servlet-mapping>
+<servlet-name>Logout</servlet-name>
+ <url-pattern>/jaxrs/Logout</url-pattern>
+</servlet-mapping>
 </web-app>
