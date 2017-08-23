@@ -183,13 +183,13 @@
         var app = angular.module('myModule', []);
         app.controller('myController', function ($scope, $http, $log) {
             $scope.addItem = function(){
-            var data = '{"spring_1":'+$scope.spring1 +',"spring_2":'+ $scope.spring_2 +',"spring_3":'+$scope.spring_3  +',"spring_4":'+$scope.spring_4' }';
+ var data = '{"spring_1":"'+$scope.spring1 +'","spring_2": "'+$scope.spring2 + '" ,"spring_3": "'+$scope.spring3 + ' ","spring_4": "'+$scope.spring4+ ' "}';         
             var config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-            $http.post('/jaxrs/ManageMachine', data, config)
+            $http.post('/SVRest/jaxrs/ManageMachine', data, config)
                 .then(function (response, status, headers, config) {
                     console.log("hena");
                     console.log(response.data);

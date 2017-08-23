@@ -97,10 +97,11 @@
 
 
         <!-- Example Tables Card -->
-          <div class="card mb-2" style="border:white ">
+          <div >
           
-           <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal" style="width: 20%; margin-left: 80%;">Add Item</button>
-
+           <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal" style="width: 10%; margin-left: 60%;">Add Item</button>
+		   <button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal_Edit" style="width: 10%;">Edit Item</button>
+			<button type="button" class="btn btn-info btn-md" data-toggle="modal" data-target="#myModal_Delete" style="width: 10%;">Delete Item</button>
           </div>
           
           <!-- Modal -->
@@ -142,24 +143,94 @@
             
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" ng-click="addItem()" data-dismiss="modal" >Close</button>
+          <button type="button" class="btn btn-primary" ng-click="addItem()" data-dismiss="modal" >Save</button>
         </div>
       </div>
       
     </div>
   </div>
-        <div class="card mb-3" ng-app="myModule">
+    <!-- Modal_Edit -->
+  <div class="modal fade" id="myModal_Edit" role="dialog" >
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" ng-controller="myController">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Item</h4>
+        </div>
+        <div class="modal-body"  >
+                      <div class="form-group">
+                        <label for="id">id:</label>
+                        <input  class="form-control" id="id" ng-model="id" >
+                      </div>
+                      <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input  class="form-control" id="name"  ng-model="name">
+                      </div>
+                        <div class="form-group">
+                        <label for="number">Number:</label>
+                        <input  class="form-control" id="number" ng-model="number">
+                      </div>
+                       <div class="form-group">
+                         <label for="exp">Expiry Date:</label>
+                        <input  class="form-control" id="exp" ng-model="expiry">
+                        </div>
+                        <div class="form-group">
+                         <label for="Calories">Calories:</label>
+                        <input  class="form-control" id="cal" ng-model="cal">
+                        </div>
+                        <div class="form-group">
+                         <label for="Calories">Price:</label>
+                        <input  class="form-control" id="price" ng-model="price">
+                        </div>
+            
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="addItem()" data-dismiss="modal" >Save</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+    <!-- Modal -->
+  <div class="modal fade" id="myModal_Delete" role="dialog" >
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" ng-controller="contrl_delete">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Delete Item</h4>
+        </div>
+        <div class="modal-body"  >
+                      <div class="form-group">
+                        <label for="id">id:</label>
+                        <input  class="form-control" id="id" ng-model="deleteid" >
+                      </div>
+                    
+            
+            
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="deleteItem()" data-dismiss="modal" >Delete</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <div ng-controller="contrl" ng-init="items()">
+        <div class="card mb-3" ng-if="loaded">
           <div class="card-header">
             <i class="fa fa-table"></i>
             Items
           </div>
-          <div class="card-body" ng-controller="contrl" >
-          
+          <div class="card-body"  >
             <div class="table-responsive">
-              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" ng-init="items()">
+              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" >
                 <thead>
                   <tr >
-                 
                     <th>Name</th>
                     <th>Price</th>
                     <th>Expiry Date</th>
@@ -173,8 +244,6 @@
                     <td>{{data.expiry_date}}</td>
                       <td>{{data.calories}}</td>
                   </tr>
-    
-                 
                 </tbody>
               </table>
             </div>
@@ -182,8 +251,21 @@
           <div class="card-footer small text-muted">
             Updated yesterday at 11:59 PM
           </div>
-        </div>
+<!--            js -->
 
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/popper/popper.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/sb-admin.min.js"></script>
+        </div>
+        </div>
       </div>
       <!-- /.container-fluid -->
 
@@ -216,24 +298,12 @@
       </div>
     </div>
   
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/popper/popper.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-
-    <!-- Plugin JavaScript -->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="vendor/datatables/jquery.dataTables.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="js/sb-admin.min.js"></script>
         <script>
         var app = angular.module('myModule', []);
         app.controller('myController', function ($scope, $http, $log) {
             $scope.addItem = function(){
- var data = '{"_id":"'+$scope.id +'","name": "'+$scope.name + '" ,"number": "'+$scope.number + ' ","price": "'+$scope.price+ ' ","calories": "'+$scope.cal +  '" ,"expiry_date": "'+$scope.expiry +'"}';            var config = {
+ var data = '{"_id":"'+$scope.id +'","name": "'+$scope.name + '" ,"number": "'+$scope.number + ' ","price": "'+$scope.price+ ' ","calories": "'+$scope.cal +  '" ,"expiry_date": "'+$scope.expiry +'"}';           
+       var config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -242,7 +312,7 @@
                 .then(function (response, status, headers, config) {
                     console.log("added");
                     console.log(response.data);
-                     window.location.href="items.html";
+                     
                     
                 }, function myError(response) {
                     console.log(response.statusText);
@@ -254,10 +324,37 @@
           });
        
     app.controller('contrl', function ($scope, $http, $log) {
+    $scope.loaded = false;
         $scope.items = function(){
    
           $scope.mydata=[];
      $http.get('/SVRest/jaxrs/Items').then(function (response, status, headers, config) {
+                    console.log("hena");
+                    $scope.mydata = response.data;
+                    $scope.loaded = true;
+                    console.log(response.data);
+                    
+                }, function myError(response) {
+                    console.log(response.statusText);
+                }, function (reason) {
+                    console.log(reason);
+                });
+
+
+}
+    });
+    
+    app.controller('contrl_delete', function ($scope, $http, $log) {
+        $scope.deleteItem = function(){
+   
+          var data = '{"_id":"'+$scope.deleteid +'"}';   
+           console.log($scope.deleteid) ;       
+       var config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+     $http.post('/SVRest/jaxrs/DeleteItem', data, config).then(function (response, status, headers, config) {
                     console.log("hena");
                     $scope.mydata = response.data;
                     console.log(response.data);

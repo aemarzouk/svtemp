@@ -29,7 +29,7 @@
 
   </head>
 
-  <body class="fixed-nav" id="page-top" ng-app="myModule"    >
+  <body class="fixed-nav" id="page-top"    >
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
@@ -107,27 +107,26 @@
             <i class="fa fa-table"></i>
             Transactions 
           </div>
-          <div class="card-body" ng-controller="contrl" ng-init="items()">
+          <div class="card-body" ng-controller="contrl" >
             <div class="table-responsive">
-              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" >
+              <table class="table table-bordered" width="100%" id="dataTable" cellspacing="0" ng-init="items()" >
                 <thead>
                   <tr >
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>item</th>
-                    <th>Price</th>
-                    <th> Date</th>
+                    <th>Username</th>
+                    <th>Item Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    
                     
                   </tr>
                 </thead>
                 <tbody>
                   <tr ng-repeat="data in mydata">
-                    <td>{{data.id}}</td>
-                    <td>{{data.name}}</td>
-                    <td>{{data.item}}</td>
-
-                    <td>{{data.date}}</td>
-                    <td>{{x.price}}</td>
+                    <td>{{data.username}}</td>
+                    <td>{{data.item_name}}</td>
+                    <td>{{data.trans_date}}</td>
+                    <td>{{data.trans_time}}</td>
+                
                       
                   </tr>
     
@@ -191,16 +190,17 @@
         var app = angular.module('myModule', []);
     app.controller('contrl', function ($scope, $http, $log) {
         $scope.items = function(){
+         $scope.mydata =[];
      var config = {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             }
-         $scope.mydata =[];
-     $http.get(SVRest/jaxrs/GetItems).then(function (response, status, headers, config) {
+        
+     $http.get('/SVRest/jaxrs/Transactions').then(function (response, status, headers, config) {
                     console.log("hena");
-                    $scope.mydata = response.data;
-                    console.log(response.data);
+                    $scope.mydata = response.data.Transactions;
+                    console.log($scope.mydata);
                 }, function myError(response) {
                     console.log(response.statusText);
                 }, function (reason) {
