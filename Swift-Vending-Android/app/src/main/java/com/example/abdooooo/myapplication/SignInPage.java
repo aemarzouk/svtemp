@@ -2,7 +2,9 @@ package com.example.abdooooo.myapplication;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -61,7 +63,7 @@ public class SignInPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                bar2.setVisibility(View.VISIBLE);
+
                 if(mEmail.getText().toString().isEmpty() ||mPassword.getText().toString().isEmpty() ){
                     Toast.makeText(getApplication(),"Please Enter Username and Password", Toast.LENGTH_LONG).show();
                 }
@@ -93,6 +95,8 @@ public class SignInPage extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            bar2.setVisibility(View.VISIBLE);
+
 
 
 
@@ -158,27 +162,41 @@ public class SignInPage extends AppCompatActivity {
 
         @Override
         public void onPostExecute(String result) {
-
-
-            if(result.contains("1")) {
-                bar2.setVisibility(View.INVISIBLE);
-
-                // open new activity
-                //new Buy_Item()
-                final Intent i = new Intent (activityReference, MultiTrackerActivity.class);
-                String item_id  = result;
-                i.putExtra("user_id", user_id);
-                startActivity(i);
-
-                //startActivity(new Intent(getApplicationContext(), MultiTrackerActivity.class));
-            }
-            else if (result.contains("2")){
-                Toast.makeText(getApplication(),"Wrong Username", Toast.LENGTH_LONG).show();
-            }
-            else{
+            result = result.replaceAll("(\\r|\\n)", "");
+            if(result.equals("0")) {
                 Toast.makeText(getApplication(), "Wrong password", Toast.LENGTH_LONG).show();
+                bar2.setVisibility(View.INVISIBLE);
+            }
+            else if (result.equals("1")) {
+                Toast.makeText(getApplication(), "Account is already logged in", Toast.LENGTH_LONG).show();
+                bar2.setVisibility(View.INVISIBLE);
+            }
+            else if (result.equals("2")){
+                Toast.makeText(getApplication(),"Wrong Username", Toast.LENGTH_LONG).show();
+                bar2.setVisibility(View.INVISIBLE);
+            }
+            else if (result.equals("3")){
+                Toast.makeText(getApplication(), "Connection Failed", Toast.LENGTH_LONG).show();
+                bar2.setVisibility(View.INVISIBLE);
+            }
+            else {
+                bar2.setVisibility(View.INVISIBLE);
+                SharedPreferences sharedPref = activityReference.getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(getString(R.string.userID), user_id);
+                editor.putString(getString(R.string.sessionID), result);
+                editor.commit();
+                String defaultValue1 = getResources().getString(R.string.userID);
+                String userID = sharedPref.getString(getString(R.string.userID), defaultValue1);
+                String defaultValue2 = getResources().getString(R.string.sessionID);
+                String sessionID = sharedPref.getString(getString(R.string.sessionID), defaultValue2);
+                Toast.makeText(getApplication(), "Welcome " +userID + ".", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getApplicationContext(), MultiTrackerActivity.class));
+                finish();
             }
         }
+
     }
 
 

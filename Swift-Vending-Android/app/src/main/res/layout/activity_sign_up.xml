@@ -19,9 +19,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="1">
-<FrameLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+
 
     <ImageView
         android:id="@+id/imageView2"
@@ -29,14 +27,8 @@
         android:layout_height="209dp"
         app:srcCompat="@drawable/logo" />
 
-    <ImageView
-        android:id="@+id/back"
-        android:layout_width="82dp"
-        android:layout_height="54dp"
-        app:srcCompat="@drawable/back"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="-15dp"/>
-</FrameLayout>
+
+
 
             <EditText
                 android:id="@+id/email"

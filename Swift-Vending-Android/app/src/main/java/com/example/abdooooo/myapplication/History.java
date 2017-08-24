@@ -1,7 +1,9 @@
 package com.example.abdooooo.myapplication;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -40,18 +42,23 @@ public class History extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        activityReference=this ;
         //------
         //progress bar
         loadingPb = (ProgressBar) findViewById(R.id.loadingPb);
         //----
 
+        Context context = activityReference;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        String defaultValue1 = getResources().getString(R.string.userID);
+        String userID = sharedPref.getString(getString(R.string.userID), defaultValue1);
+        String defaultValue2 = getResources().getString(R.string.sessionID);
+        String sessionID = sharedPref.getString(getString(R.string.sessionID), defaultValue2);
         String url = "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/GetItems";
-        Intent i = getIntent();
-        String user_id = i.getStringExtra("user_id");
-        String username = user_id;
-        activityReference = this;
-        new getTrans().execute(url , username);
+
+        new getTrans().execute(url , userID , sessionID);
         //init();
 
 
@@ -72,15 +79,16 @@ public class History extends AppCompatActivity {
             //Intent i = getIntent();
             //String item_id = i.getStringExtra("item_id");
             BufferedReader br = null;
-            String username;
+            String username , sessionID ;
             URL url;
             try {
                 url = new URL(params[0]);
                 username = params[1] ;
+                sessionID = params[2] ;
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.setRequestProperty("sessionID", "youmna1234");
+                connection.setRequestProperty("sessionID" , sessionID) ;
                 connection.setRequestMethod("POST");
                 ////change the next line according to the object you want to post
                 String jsonObj ="{\"_id\":\""+username+"\"}"  ;
@@ -142,19 +150,21 @@ public class History extends AppCompatActivity {
                 stk.setColumnStretchable(2,false);
                 TableRow tbrow0 = new TableRow(activityReference);
                 TextView tv0 = new TextView(activityReference);
-                tbrow0.setPadding(0,50,0,100);
+                tbrow0.setPadding(0,0,0,100);
 
                 tv0.setText("Item Name");
                 tv0.setPadding(20,0,0,0);
                 tv0.setTypeface(null, Typeface.BOLD);
                 tv0.setTextColor(Color.BLACK);
                 tv0.setTextSize(20);
+                tbrow0.setPadding(20,400,0,0);
 
                 tv0.setGravity(Gravity.LEFT);
                 tbrow0.addView(tv0);
 
                 TextView tv1 = new TextView(activityReference);
                 tv1.setText("Date");
+
                 tv1.setTextColor(Color.BLACK);
                 tv1.setGravity(Gravity.CENTER);
                 tv1.setTypeface(null, Typeface.BOLD);
@@ -162,9 +172,10 @@ public class History extends AppCompatActivity {
                 tbrow0.addView(tv1);
                 TextView tv2 = new TextView(activityReference);
                 tv2.setText("Time");
-                tv1.setTypeface(null, Typeface.BOLD);
-                tv2.setTextColor(Color.DKGRAY);
+                tv2.setTypeface(null, Typeface.BOLD);
+                tv2.setTextColor(Color.BLACK);
                 tv2.setGravity(Gravity.RIGHT);
+                tv2.setPadding(0,0,100,0);
                 tv2.setTextSize(20);
                 tbrow0.addView(tv2);
                 stk.addView(tbrow0);
@@ -188,6 +199,7 @@ public class History extends AppCompatActivity {
                     t3v.setTextColor(Color.BLACK);
                     t3v.setGravity(Gravity.RIGHT);
                     t3v.setTextSize(20);
+                    t3v.setPadding(0,0,90,0);
                     tbrow.addView(t3v);
                     stk.addView(tbrow);
 

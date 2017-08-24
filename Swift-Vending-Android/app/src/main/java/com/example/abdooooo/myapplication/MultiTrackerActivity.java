@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -85,6 +86,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
 
     private String ItemID;
     public String Iteminfo;
+    private TextView hint;
 
     AlertDialog ad;
 
@@ -142,25 +144,56 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
      * Initializes the UI and creates the detector pipeline.
      */
     String result;
-
+    private Activity activityReference;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.main);
         history = (Button) findViewById(R.id.btn_history);
-        final Intent i = new Intent (this, History.class);
+        activityReference=this ;
+        hint = (TextView) findViewById(R.id.hintt) ;
+        hint.setVisibility(View.VISIBLE);
+       /* // check session
+
+        Context context = this;
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String defaultValue2 = getResources().getString(R.string.sessionID);
+        String sessionID = sharedPref.getString(getString(R.string.sessionID), defaultValue2);
+        if (!sharedPref.contains("userID") || sessionID.equals("null")) {
+            startActivity(new Intent(getApplicationContext(), SignInPage.class));
+        } else {
+            String defaultValue1 = getResources().getString(R.string.userID);
+            String userID = sharedPref.getString(getString(R.string.userID), defaultValue1);
+            Toast.makeText(getApplication(), "Welcome " + userID + ".", Toast.LENGTH_LONG).show();
+            //startActivity(new Intent(getApplicationContext(), MultiTrackerActivity.class));
+        }
+        //----------*/
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(getApplicationContext(), History.class));
-                Intent i1 = getIntent();
-                String user_id = i1.getStringExtra("user_id");
-                //String user_id  = i.getStringExtra("user_id");
-                i.putExtra("user_id", user_id);
-                startActivity(i);
+                startActivity(new Intent(getApplicationContext(), History.class));
 
             }
         });
+
+        Button logout = (Button) findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = activityReference;
+                SharedPreferences sharedPref = context.getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+                String defaultValue1 = getResources().getString(R.string.userID);
+                String userID = sharedPref.getString(getString(R.string.userID), defaultValue1);
+                String defaultValue2 = getResources().getString(R.string.sessionID);
+                String sessionID = sharedPref.getString(getString(R.string.sessionID), defaultValue2);
+                String url = "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/Logout";
+                new logout().execute(url, userID, sessionID);
+            }
+        });
+
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.faceOverlay);
 
@@ -168,10 +201,15 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
                 .setTitle("Item Info").setPositiveButton("Buy", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String item_id = ItemID;
-                        Intent i = getIntent();
-                        String user_id = i.getStringExtra("user_id");
-                        String url = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/BuyItem";
-                        new buy_item().execute(url, user_id, item_id);
+                        Context context = activityReference;
+                        SharedPreferences sharedPref = context.getSharedPreferences(
+                                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                        String defaultValue1 = getResources().getString(R.string.userID);
+                        String userID = sharedPref.getString(getString(R.string.userID), defaultValue1);
+                        String defaultValue2 = getResources().getString(R.string.sessionID);
+                        String sessionID = sharedPref.getString(getString(R.string.sessionID), defaultValue2);
+                        String url = "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/BuyItem";
+                        new buy_item().execute(url, userID, item_id ,sessionID);
 
                     }
                 })
@@ -215,6 +253,83 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
         }
     }
 
+    protected class logout extends AsyncTask<String, Void, String> {
+        String error, out = "";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            BufferedReader br = null;
+            String username, session_id;
+            URL buy_url;
+            String content = "";
+
+            try {
+                buy_url = new URL(params[0]);
+                username = params[1];
+                session_id = params[2];
+
+                HttpURLConnection buy_connection = (HttpURLConnection) buy_url.openConnection();
+                buy_connection.setRequestProperty("Content-Type", "application/json");
+                buy_connection.setRequestProperty("Accept", "application/json");
+                buy_connection.setRequestProperty("sessionID" ,session_id );
+                buy_connection.setRequestMethod("POST");
+                ////change the next line according to the object you want to post
+                String buy_jsonObj = "{\"user_id\":\"" + username + "\"}";
+                buy_connection.setDoOutput(true);
+                OutputStreamWriter wr = new OutputStreamWriter(buy_connection.getOutputStream());
+                wr.write(buy_jsonObj);
+                wr.flush();
+                wr.close();
+                int buy_httpCode = buy_connection.getResponseCode();
+                if (buy_httpCode == 200 || buy_httpCode == 201) {
+                    br = new BufferedReader(new InputStreamReader(buy_connection.getInputStream()));
+                } else {
+                    br = new BufferedReader(new InputStreamReader(buy_connection.getErrorStream()));
+                }
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append(System.getProperty("line.separator"));
+                }
+
+                content = sb.toString();
+
+                buy_connection.disconnect();
+            } catch (ProtocolException e1) {
+                e1.printStackTrace();
+            } catch (MalformedURLException e1) {
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return content;
+
+        }
+
+        @Override
+        public void onPostExecute(String result) {
+            result = result.replaceAll("(\\r|\\n)", "");
+            Context context = activityReference;
+            SharedPreferences sharedPref = context.getSharedPreferences(
+                    getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            //SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.userID), "null");
+            editor.putString(getString(R.string.sessionID), "null");
+            editor.commit();
+            Toast.makeText(getApplicationContext() , result ,Toast.LENGTH_LONG).show();
+            startActivity(new Intent(getApplicationContext(), SignInPage.class));
+        }
+    }
+
+
 
     protected class buy_item extends AsyncTask<String, Void, String> {
         String error, out = "";
@@ -228,18 +343,19 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
         protected String doInBackground(String... params) {
 
             BufferedReader br = null;
-            String username, item_id;
+            String username, item_id , session_id ;
             URL buy_url;
             String content = "";
 
             try {
                 buy_url = new URL(params[0]);
-                username = new String(params[1]);
-                item_id = new String(params[2]);
-
+                username = params[1];
+                item_id = params[2];
+                session_id = params[3];
                 HttpURLConnection buy_connection = (HttpURLConnection) buy_url.openConnection();
                 buy_connection.setRequestProperty("Content-Type", "application/json");
                 buy_connection.setRequestProperty("Accept", "application/json");
+                buy_connection.setRequestProperty("sessionID" ,session_id );
                 buy_connection.setRequestMethod("POST");
                 ////change the next line according to the object you want to post
                 String buy_jsonObj = "{\"spring_id\":\"" + item_id + "\",\"user_id\":\"" + username + "\" }";
@@ -254,6 +370,14 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
                 } else {
                     br = new BufferedReader(new InputStreamReader(buy_connection.getErrorStream()));
                 }
+                StringBuilder sb = new StringBuilder();
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                    sb.append(System.getProperty("line.separator"));
+                }
+
+                content = sb.toString();
                 buy_connection.disconnect();
             } catch (ProtocolException e1) {
                 e1.printStackTrace();
@@ -269,9 +393,11 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
 
         @Override
         public void onPostExecute(String result) {
-            Toast.makeText(getApplicationContext() , "Item bought successfully",Toast.LENGTH_LONG).show();
+            result = result.replaceAll("(\\r|\\n)", "");
+            Toast.makeText(getApplicationContext() ,result,Toast.LENGTH_LONG).show();
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -300,7 +426,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
 
                       Log.d(TAG,"ItemID"+ItemID);
                       Log.d(TAG,"ItemInfo"+Iteminfo);
-
+                  hint.setVisibility(View.INVISIBLE);
                 r=g.GetBarcode().getBoundingBox();
                 inside= r.contains(x,y);
                 if (inside==true)
@@ -553,7 +679,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.setRequestProperty("sessionID", "youmna1234");
+               // connection.setRequestProperty("sessionID", "youmna1234");
                 connection.setRequestMethod("POST");
                 ////change the next line according to the object you want to post
                 String jsonObj = "{\"item_id\":\""+result+"\"}";
@@ -606,7 +732,7 @@ public final class MultiTrackerActivity extends AppCompatActivity implements Ges
                 String price = jo.getString("price");
                 String Expiry= jo.getString("expiry_date");
                 String Calories= jo.getString("calories");
-                Iteminfo= "Name : "+name+"\t"+ "Price: "+price+"\n"+"Expiry : "+Expiry+"\t"+"Calories : "+Calories;
+                Iteminfo= "Name : "+name+"\n"+ "Price: "+price+"\n"+"Expiry : "+Expiry+"\n"+"Calories : "+Calories;
                Log.d(TAG, "Item Info from inside:"+ Iteminfo);
                 ad.setMessage(Iteminfo);
                 ad.show();

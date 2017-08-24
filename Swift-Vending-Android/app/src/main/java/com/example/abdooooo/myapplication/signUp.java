@@ -1,7 +1,9 @@
 package com.example.abdooooo.myapplication;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,13 +42,7 @@ public class signUp extends AppCompatActivity {
         final EditText mEmail = (EditText) findViewById(R.id.email);
         final EditText mPassword = (EditText) findViewById(R.id.pass);
         final EditText cPassword = (EditText) findViewById(R.id.confirmPass);
-        final ImageView backbtn= (ImageView) findViewById(R.id.back);
-        backbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), SignInPage.class));
-            }
-        });
+
 
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -55,7 +51,7 @@ public class signUp extends AppCompatActivity {
 
                     } else {
                         // Code here executes on main thread after user presses button
-                        String restURL = "https://swiftvending.eu-gb.mybluemix.net/RestTest/jaxrs/SignUp";
+                        String restURL = "https://swiftvending.eu-gb.mybluemix.net/SVRest/jaxrs/SignUp";
                         new RestOperation().execute(restURL, mEmail.getText().toString(), mPassword.getText().toString());
                     }
                 }
@@ -133,11 +129,16 @@ public class signUp extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            if(result.contains("1")) {
-                final Intent i = new Intent (activityReference, MultiTrackerActivity.class);
-                i.putExtra("user_id", user_id);
-                startActivity(i);
-                //startActivity(new Intent(getApplicationContext(),MultiTrackerActivity.class));
+            result = result.replaceAll("(\\r|\\n)", "");
+            if(!result.equals("0")) {
+                SharedPreferences sharedPref = activityReference.getSharedPreferences(
+                        getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(getString(R.string.userID), user_id);
+                editor.putString(getString(R.string.sessionID), result);
+                editor.commit();
+                Toast.makeText(getApplication(), "Welcome " + user_id +"." , Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getApplicationContext(),MultiTrackerActivity.class));
             }
             else{
                 Toast.makeText(getApplication(), "Email already exists", Toast.LENGTH_LONG).show();
